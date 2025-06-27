@@ -360,12 +360,12 @@ body {
 .newsletter h3 {
   font-size: 1.5rem;
   margin-bottom: 1rem;
-  color: #f7fafc;
+  color: #f3f4f5;
 }
 
 .newsletter p {
   margin-bottom: 1.5rem;
-  color: #e2e8f0;
+  color: #030303;
 }
 
 .newsletterForm {
@@ -385,7 +385,7 @@ body {
 .newsletterForm button {
   padding: 0 1.5rem;
   background-color: #161d47;
-  color: white;
+  color: rgb(255, 255, 255);
   border: none;
   border-radius: 0 5px 5px 0;
   cursor: pointer;

@@ -13,8 +13,8 @@ const Footer = () => {
           <h3>Join Our Travel Community</h3>
           <p>Get exclusive travel tips and updates delivered to your inbox</p>
           <form className="newsletterForm">
-            <input type="email" placeholder="Your email address" required />
-            <button type="submit">Subscribe</button>
+            <input type="email" placeholder="Your email address" className='text-black'required />
+            <button type="submit" >Subscribe</button>
           </form>
         </div>
 
