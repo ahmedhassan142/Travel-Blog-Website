@@ -2,7 +2,7 @@
 import  { connectToDatabase } from "@/lib/db";
 import {z} from "zod"
 import { NextApiRequest, NextApiResponse } from "next";
-import subscriptiom from "@/schemas/subscriptiom";
+import subscription from "@/schemas/subscription";
 
 
 
@@ -18,7 +18,7 @@ const subscriptionSchema = z.object({
                 if(!validation.success){
                     return res.status(403).json({message:"validation failed"})
                 }
-                const Subscription=await subscriptiom.create(req.body)
+                const Subscription=await subscription.create(req.body)
                  res.status(200).json({data:Subscription})
               } catch (error) {
                 return res.status(404).json({message:"Failed to subscription"})
