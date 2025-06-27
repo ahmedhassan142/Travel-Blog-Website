@@ -1,20 +1,51 @@
 import mongoose, { ConnectOptions } from "mongoose";
 
-const MONGODB_URI = process.env.MONGODB_URI ||'' ;
+// Explicit type declaration with fallback
+const MONGODB_URI: string = process.env.MONGODB_URI ?? '';
 
 if (!MONGODB_URI) {
-  throw new Error("❌ MONGODB_URI is missing from .env.local");
+  throw new Error("❌ MONGODB_URI is missing from environment variables");
 }
 
-export async function connection() {
-  try {
-    const options: ConnectOptions = {}; // No more deprecated options
+interface MongooseGlobal {
+  conn: typeof mongoose | null;
+  promise: Promise<typeof mongoose> | null;
+}
 
-    await mongoose.connect(MONGODB_URI, options);
-    console.log("✅ Connected to MongoDB");
-  } catch (error) {
-    console.error("❌ MongoDB connection error:", error);
-    throw error;
+declare const global: typeof globalThis & {
+  mongoose: MongooseGlobal;
+};
+
+let cached = global.mongoose || { conn: null, promise: null };
+
+export async function connectToDatabase() {
+  if (cached.conn) return cached.conn;
+
+  if (!cached.promise) {
+    const opts: ConnectOptions = {
+      dbName: "products", // Explicit database name
+      bufferCommands: false,
+      serverSelectionTimeoutMS: 10000,
+      socketTimeoutMS: 45000
+    };
+
+    cached.promise = mongoose.connect(MONGODB_URI, opts)
+      .then((mongoose) => {
+        console.log("✅ MongoDB Connected");
+        return mongoose;
+      })
+      .catch((error) => {
+        console.error("❌ MongoDB Connection Error:", error);
+        throw error;
+      });
   }
-}
 
+  try {
+    cached.conn = await cached.promise;
+  } catch (e) {
+    cached.promise = null;
+    throw e;
+  }
+
+  return cached.conn;
+}

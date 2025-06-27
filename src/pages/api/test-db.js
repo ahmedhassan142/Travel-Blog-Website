@@ -1,22 +1,10 @@
-import { connectDB } from '../../lib/db'; // Import named export
+import connectToDatabase from '../../dbconnect/lib';
 
 export default async function handler(req, res) {
   try {
-    await connectDB(); // Use the connection
-    
-    // Test MongoDB connection
-    const db = mongoose.connection;
-    const collections = await db.db.listCollections().toArray();
-
-    res.status(200).json({
-      status: "Success",
-      collections: collections.map(c => c.name)
-    });
-    
+    await connectToDatabase(); // Reuses existing connection
+    res.status(200).json({ status: 'Success' });
   } catch (error) {
-    res.status(500).json({
-      status: "Failed",
-      error: error.message
-    });
+    res.status(500).json({ status: 'Failed', error: error.message });
   }
 }
