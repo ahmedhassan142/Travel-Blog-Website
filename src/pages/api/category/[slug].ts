@@ -1,5 +1,5 @@
 import category from "@/schemas/category";
-import { connection } from "@/dbconnect/lib";
+import  { connectToDatabase } from "@/lib/db";
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { ICategory } from '@/types/category';
 
@@ -23,7 +23,7 @@ export default async function handler(
   }
 
   try {
-    await connection();
+    await connectToDatabase();
     const { slug } = req.query;
 
     if (!slug) {

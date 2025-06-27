@@ -1,12 +1,12 @@
 // pages/api/increment-views.ts
 import { NextApiRequest, NextApiResponse } from "next";
-import { connection } from "@/dbconnect/lib";
+import  { connectToDatabase } from "@/lib/db";
 import blog from "@/schemas/blog";
 
 const VIEWS_LIMIT_FOR_FEATURED = 1; // Set your views limit here
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  await connection();
+  await connectToDatabase();
 
   if (req.method === "PUT") {
     const  slug  = req.body; // Get the postId from the request body

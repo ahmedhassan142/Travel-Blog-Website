@@ -1,11 +1,11 @@
 import category from "@/schemas/category";
 // import { getSession } from "next-auth/react"
-import { connection } from "@/dbconnect/lib";
+import  { connectToDatabase } from "@/lib/db";
 import { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
    
-    await connection()
+    await  connectToDatabase()
 
     if (req.method === "GET") {
         try {

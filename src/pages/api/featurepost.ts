@@ -1,9 +1,9 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { connection } from "@/dbconnect/lib";
+import  { connectToDatabase } from "@/lib/db";
 import blog from "@/schemas/blog";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  await connection();
+  await connectToDatabase();
 
   if (req.method === "GET") {
     try {

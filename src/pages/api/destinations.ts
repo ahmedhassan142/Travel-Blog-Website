@@ -1,8 +1,8 @@
-import { connection } from "@/dbconnect/lib";
+import  { connectToDatabase } from "@/lib/db";
 import { NextApiRequest, NextApiResponse } from "next";
 import destination from "@/schemas/destination";
 export default async function handler(req:NextApiRequest,res:NextApiResponse){
-    await connection()
+    await connectToDatabase()
     if(req.method==="GET"){
       try {
         const founddestination=await destination.find({}).maxTimeMS(30000);

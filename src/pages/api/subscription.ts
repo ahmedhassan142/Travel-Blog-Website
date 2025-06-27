@@ -1,5 +1,5 @@
 
-import { connection } from "@/dbconnect/lib";
+import  { connectToDatabase } from "@/lib/db";
 import {z} from "zod"
 import { NextApiRequest, NextApiResponse } from "next";
 import subscriptiom from "@/schemas/subscriptiom";
@@ -11,7 +11,7 @@ const subscriptionSchema = z.object({
     email: z.string().email('Invalid email address'),
   });
   export default async function handler(req:NextApiRequest,res:NextApiResponse){
- await connection()
+ await connectToDatabase()
        if(req.method==="POST"){
               try {
                 const validation=subscriptionSchema.safeParse(req.body)

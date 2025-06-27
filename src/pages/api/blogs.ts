@@ -1,5 +1,5 @@
 import blog from "@/schemas/blog"; // Ensure correct schema import
-import { connection } from "@/dbconnect/lib";
+import  { connectToDatabase } from "@/lib/db";
 import { NextApiRequest, NextApiResponse } from "next";
 import cloudinary from "cloudinary";
 import { IncomingForm, Fields, Files } from "formidable";
@@ -21,7 +21,7 @@ export const config = {
 
 // API Handler
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  await connection(); // Connect to DB
+  await connectToDatabase(); // Connect to DB
 
   if (req.method === "GET") {
     try {

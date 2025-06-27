@@ -1,6 +1,6 @@
 // pages/api/destinations/[slug].ts
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { connection } from '@/dbconnect/lib'
+import  { connectToDatabase } from "@/lib/db";
 import blog from '@/schemas/blog'
 
  const handler=async(
@@ -16,7 +16,7 @@ import blog from '@/schemas/blog'
   try {
     // 1. Verify connection
     console.log('Connecting to DB...')
-    await connection()
+    await connectToDatabase()
     console.log('DB connected')
 
     // 2. Verify parameter
