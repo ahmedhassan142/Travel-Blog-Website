@@ -1,36 +1,26 @@
+// lib/db.js
 import mongoose from 'mongoose';
 
-export default async function handler(req, res) {
-  try {
-    // Force new connection
-    await mongoose.disconnect();
-    
-    // Explicit connection with error handling
-    const conn = await mongoose.connect(process.env.MONGODB_URI, {
-      serverSelectionTimeoutMS: 5000,
-      dbName: 'your-database-name' // ⚠️ Add this line explicitly
-    });
+const conn = {
+  isConnected: false
+};
 
-    // Get native MongoDB driver instance
-    const db = conn.connection.db;
-    
-    // Test database operations
-    const collections = await db.listCollections().toArray();
+export async function connectDB() {
+  if (conn.isConnected) return;
 
-    res.status(200).json({
-      status: "Success",
-      collections: collections.map(c => c.name),
-      stats: await db.stats() // Additional verification
-    });
+  const db = await mongoose.connect(process.env.MONGODB_URI, {
+    serverSelectionTimeoutMS: 10000,
+    socketTimeoutMS: 45000,
+    family: 4 // Force IPv4
+  });
 
-  } catch (error) {
-    res.status(500).json({
-      status: "Failed",
-      error: error.message,
-      connectionState: mongoose.connection.readyState,
-      suggestion: "1. Verify dbName in connection 2. Check user permissions"
-    });
-  } finally {
-    await mongoose.disconnect();
-  }
+  conn.isConnected = db.connections[0].readyState;
 }
+
+mongoose.connection.on('connected', () => {
+  console.log('✅ MongoDB Connected');
+});
+
+mongoose.connection.on('error', (err) => {
+  console.error('❌ MongoDB Error:', err);
+});
